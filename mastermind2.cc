@@ -7,10 +7,12 @@ typedef vector< vector<char> >Matrizfich;
 
 bool repetits(const vector<int> &v){
 //Pre: v es un vector no vacio con la combinación secreta del jugador A.
-//Post: si dentro del vector v se repite algún valor, devuelve verdadero.
+//Post1: si dentro del vector v se encuentra un 0 o un 9, devuelve verdadero.
+//Post2: si dentro del vector v se repite algún valor, devuelve verdadero.
     bool rep=false;
     int i=0;
     while(not rep and i<4){
+        if(v[i]==0){rep=true;}
         int j=0;
         while(not rep and j<4){
             if(i!=j){
