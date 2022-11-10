@@ -36,7 +36,7 @@ int main(){
     int cod;    //codigo secreto
     cin>>cod;
     int aux=cod;
-        if (cod>9999 or cod<1000){
+        if (cod>8765 or cod<1234){
             cout<<"La combinació "<<cod<<" no és correcte..."<<endl;
             cout<<"Recorda que la combinacio ha de tenir 4 numeros del 1 al 8 no repetits."<<endl;
         }else{
