@@ -5,22 +5,23 @@ using namespace std;
 typedef vector< vector<int> >Matriznum;
 typedef vector< vector<char> >Matrizfich;
 
-bool repetits(const vector<int> &v){
-//Pre: v es un vector no vacio con la combinación secreta del jugador A.
-//Post1: si dentro del vector v se encuentra un 0 o un 9, devuelve verdadero.
-//Post2: si dentro del vector v se repite algún valor, devuelve verdadero.
+bool repetit(vector<int> &v,const int &c){
+//Pre:
+
+    for(int i=0;i<4;++i){
+        v
+    }
     bool rep=false;
-    int i=0;
-    while(not rep and i<4){
-        if(v[i]==0){rep=true;}
-        int j=0;
-        while(not rep and j<4){
-            if(i!=j){
-                if(v[i]==v[j]){rep=true;}
+    if(c<=8765 or c>=1234){
+        int i=0;
+        while(not rep and i<4 and v[i]!=0){
+            int j=1;
+            while(not rep and j<4){
+                if(v[i]==v[j]) rep=true;
+                else ++j;
             }
-            ++j;
+            if(not rep) ++i;
         }
-        ++i;
     }
     return rep;
 }
@@ -48,7 +49,7 @@ int main(){
                 aux/=10;
                 ++j;
             }
-            if(repetits(combinacio)){
+            if(repetit(combinacio)){
                 cout<<"La combinació "<<cod<<" no és correcte..."<<endl;
                 cout<<"Recorda que la combinacio ha de tenir 4 numeros del 1 al 8 no repetits."<<endl;
             }else{correct=true;}
