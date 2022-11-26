@@ -4,58 +4,63 @@ using namespace std;
 
 typedef vector< vector<int> >Matriznum;
 typedef vector< vector<char> >Matrizfich;
+typedef vector<int> Vec;
 
-bool repetit(vector<int> &v,const int &c){
-//Pre:
-
-    for(int i=0;i<4;++i){
-        v
+Vec transform(int c){
+    //transform = trasforma el codigo a vector.
+    //Pre: c es un numero entero positivo de 4 digitos.
+    //Post: Devuelve un vector con cada digito del numero c.
+    Vec v(4);
+    for(int i=0:i<4;++i){
+        //Inv: El vector v contiende los digitos [4-i] del numero c en la posicion [3-(i-1)]
+        v[3-i]=c%10;
+        c/=10;
     }
-    bool rep=false;
-    if(c<=8765 or c>=1234){
+    return v;
+}
+
+bool codigo_correcto(Vec &comb,int cod){
+    //codigo_correcto = comprueba si el codigo/intento es valido.
+    //Pre: comb es un vector de enteros vacio y cod en un numero entero positivo.
+    /*Post: Devuelve verdadero si 1234<=cod<=8765 y no se repite ningun numero y cod!=9 o cod!=0.
+            en caso contrario, devuelve falso*/
+    bool incorrect=false;
+    if(cod>=1234 and cod<=8765){
+        comb=transform(cod);
         int i=0;
-        while(not rep and i<4 and v[i]!=0){
-            int j=1;
-            while(not rep and j<4){
-                if(v[i]==v[j]) rep=true;
+        while(not incorrect and i<4){
+            //Inv: no se repite ningun numero en el codigo e i-1<4
+            j=i+1;
+            while(not incorrect and j<4){
+                //Inv: no se repite ningun numero en el codigo, i-1<4, j-1<4 y ademas j-1!=9 y j-1!=0.
+                if(comb[i]==comb[j] or comb[j]==9 or comb[j]==0) incorrect=true;
                 else ++j;
             }
-            if(not rep) ++i;
+            if(not incorrect) ++i;
         }
     }
-    return rep;
+    else incorrect=true;
+    return not incorrect;
+}
+
+void jugador_a(Vec &comb){
+    //Pre: comb es un vector de enteros vacio.
+    int cod;
+    bool continuar =false
+    while(not continuar){
+        cout<<"Jugador A, escull el codi secret:"<<ednl;
+        cin>>cod;
+        if(codigo_correcto(comb,cod)) continuar=true;
+        else cout<<"Error, codi incorrecte"<<endl;
+    }
 }
 
 int main(){
     int i=0; //contador de jugadas
-    int e=0; //numero selector de jugada(fila de la matriz)
     const int Blau = 1, Groc = 2, Vermell = 3, Verd = 4; 
     const int Marro = 5, Rosa = 6, Violeta = 7, Taronja = 8;
     char Negre='X',Blanques='O';
     bool correct =false;
-    vector<int> combinacio(4);
-    cout<<"Jugador A, introdueix la combinació secreta."<<endl;
-    while(not correct){
-    int cod;    //codigo secreto
-    cin>>cod;
-    int aux=cod;
-        if (cod>8765 or cod<1234){
-            cout<<"La combinació "<<cod<<" no és correcte..."<<endl;
-            cout<<"Recorda que la combinacio ha de tenir 4 numeros del 1 al 8 no repetits."<<endl;
-        }else{
-            int j=0;
-            while(aux!=0){
-                combinacio[3-j]=aux%10;
-                aux/=10;
-                ++j;
-            }
-            if(repetit(combinacio)){
-                cout<<"La combinació "<<cod<<" no és correcte..."<<endl;
-                cout<<"Recorda que la combinacio ha de tenir 4 numeros del 1 al 8 no repetits."<<endl;
-            }else{correct=true;}
-        } 
-    }
-    /*cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
-    cout<<"Jugador B, és el teu torn. Esbrina el codi secret"<<endl;*/
-
+    Vec combinacion(4);
+    jugador_a(combinacion);
 }
