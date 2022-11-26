@@ -11,7 +11,7 @@ Vec transform(int c){
     //Pre: c es un numero entero positivo de 4 digitos.
     //Post: Devuelve un vector con cada digito del numero c.
     Vec v(4);
-    for(int i=0:i<4;++i){
+    for(int i=0;i<4;++i){
         //Inv: El vector v contiende los digitos [4-i] del numero c en la posicion [3-(i-1)]
         v[3-i]=c%10;
         c/=10;
@@ -30,7 +30,7 @@ bool codigo_correcto(Vec &comb,int cod){
         int i=0;
         while(not incorrect and i<4){
             //Inv: no se repite ningun numero en el codigo e i-1<4
-            j=i+1;
+            int j=i+1;
             while(not incorrect and j<4){
                 //Inv: no se repite ningun numero en el codigo, i-1<4, j-1<4 y ademas j-1!=9 y j-1!=0.
                 if(comb[i]==comb[j] or comb[j]==9 or comb[j]==0) incorrect=true;
@@ -46,12 +46,12 @@ bool codigo_correcto(Vec &comb,int cod){
 void jugador_a(Vec &comb){
     //Pre: comb es un vector de enteros vacio.
     int cod;
-    bool continuar =false
+    bool continuar =false;
     while(not continuar){
-        cout<<"Jugador A, escull el codi secret:"<<ednl;
+        cout<<"Jugador A, escull el codi secret:"<<endl;
         cin>>cod;
         if(codigo_correcto(comb,cod)) continuar=true;
-        else cout<<"Error, codi incorrecte"<<endl;
+        else cout<<"Error, codi incorrecte."<<endl;
     }
 }
 
