@@ -22,8 +22,8 @@ Vec transform(int c){
 bool codigo_correcto(Vec &comb,int cod){
     //codigo_correcto = comprueba si el codigo/intento es valido.
     //Pre: comb es un vector de enteros vacio y cod en un numero entero positivo.
-    /*Post: Devuelve verdadero si 1234<=cod<=8765 y no se repite ningun numero y cod!=9 o cod!=0.
-            en caso contrario, devuelve falso*/
+    /*Post: Devuelve verdadero si 1234<=cod<=8765 y no se repite ningun numero y si el codigo no contiene 9 o 0.
+            En caso contrario, devuelve falso.*/
     bool incorrect=false;
     if(cod>=1234 and cod<=8765){
         comb=transform(cod);
