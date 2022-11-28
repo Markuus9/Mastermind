@@ -32,15 +32,15 @@ bool codigo_correcto(Vec &comb,int cod){
     /*Post: Devuelve verdadero si 1234<=cod<=8765 y no se repite ningun numero y si el codigo no contiene 9 o 0.
             En caso contrario, devuelve falso.*/
     bool incorrect=false;
-    if(cod>=1234 and cod<=8765){
+    if(cod>=1234 and cod<=9876){
         comb=transform(cod);
         int i=0;
         while(not incorrect and i<4){
             //Inv: no se repite ningun numero en el codigo e i-1<4
             int j=i+1;
             while(not incorrect and j<4){
-                //Inv: no se repite ningun numero en el codigo, i-1<4, j-1<4 y además en la posicion del vector j-1 no se encuentra ningún 0 o 9.
-                if(comb[i]==comb[j] or comb[j]==9 or comb[j]==0) incorrect=true;
+                //Inv: no se repite ningun numero en el codigo, i-1<4, j-1<4 y además en la posicion del vector j-1 no se encuentra ningún 0.
+                if(comb[i]==comb[j] or comb[j]==0) incorrect=true;
                 else ++j;
             }
             if(not incorrect) ++i;
