@@ -9,7 +9,7 @@ typedef vector<int> Vec;
 
 struct Jugador {
     int Intents = 1;
-    vector<int> Jugades;
+    vector<int> Jugades;    
     vector<string> Resultat;
 };
 
@@ -29,7 +29,7 @@ Vec transform(int c){
 bool codigo_correcto(Vec &comb,int cod){
     //codigo_correcto = comprueba si el codigo/intento es valido.
     //Pre: comb es un vector de enteros vacio y cod en un numero entero positivo.
-    /*Post: Devuelve verdadero si 1234<=cod<=9876 y no se repite ningun numero y si el codigo no contiene 9 o 0.
+    /*Post: Devuelve verdadero si 1234<=cod<=9876 y no se repite ningun numero y si el codigo no contiene 0.
             En caso contrario, devuelve falso.*/
     bool incorrect=false;
     if(cod>=1234 and cod<=9876){
@@ -40,7 +40,7 @@ bool codigo_correcto(Vec &comb,int cod){
             int j=i+1;
             while(not incorrect and j<4){
                 //Inv: no se repite ningun numero en el codigo, i-1<4, j-1<4 y además en la posicion del vector j-1 no se encuentra ningún 0.
-                if(comb[i]==comb[j] or comb[j]==0) incorrect=true;
+                if(comb[i]==comb[j] or comb[j]==0) incorrect = true;
                 else ++j;
             }
             if(not incorrect) ++i;
@@ -85,12 +85,8 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final){
     while(not continuar){
         cout<<"Jugador B, intent "<< C.Intents << ':'<<endl;
         cin>>cod;
-        if(codigo_correcto(jugada,cod)){
-            continuar=true;
-        } else{
-            cout<<"Error, codi incorrecte."<<endl;
-            jugador_b(jugada, C, comb, final);
-        } 
+        if(codigo_correcto(jugada,cod))continuar=true;
+        else cout<<"Error, codi incorrecte."<<endl;
     }
     C.Resultat.push_back(visualizacion(jugada, comb, final));
     if (continuar == true){
@@ -109,11 +105,11 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final){
 void jugador_a(Vec &comb){
     //Pre: comb es un vector de enteros vacio.
     int cod;
-    bool continuar =false;
+    bool continuar = false;
     while(not continuar){
         cout<<"Jugador A, escull el codi secret:"<<endl;
         cin>>cod;
-        if(codigo_correcto(comb,cod)) continuar=true;
+        if(codigo_correcto(comb,cod)) continuar = true;
         else cout<<"Error, codi incorrecte."<<endl;
     }
 }
@@ -124,11 +120,9 @@ bool triar_mode(bool &Mode){
     //Post: Torna el resultat escollit pel jugador, el qual pot ser Manual o Automatic.
     char input;
     cin >> input;
-    if (input == 'A'){
-        Mode = false;
-    } else if(input == 'M'){
-        Mode = true;
-    } else {
+    if (input == 'A') Mode = false;
+    else if(input == 'M') Mode = true;
+    else {
        cout << "Error: Mode de joc incorrecte." << endl << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? :"<< endl;
        triar_mode(Mode);
     }
