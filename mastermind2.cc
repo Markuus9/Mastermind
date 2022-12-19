@@ -3,8 +3,6 @@
 #include <random>
 using namespace std;
 
-typedef vector< vector<int> >Matriznum;
-typedef vector< vector<char> >Matrizfich;
 typedef vector<int> Vec;
 
 struct Jugador {
@@ -34,8 +32,12 @@ Vec transform(int c){
 }
 
 int invert_transform(const Vec &comb){
+    //Pre: comb es un vector de enteros no vacio.
+    //Post: devuelve el valor de la concatenacion de cada posicion del vector.
+    unsigned int size= comb.size();
     int codigo=0;
-    for(int i=0;i<3;++i){
+    for(int i=0;i<size-1;++i){
+        //Inv: Se almacena en codigo la concatencacion de los valores de comb hasta i-1.
         codigo+=comb[i];
         codigo*=10;
     }
@@ -111,10 +113,13 @@ bool triar_mode(bool &Mode){
     return Mode;
 }
 
-bool corrector_automatico(Vec &comb,const int &i,int num){
+bool corrector_automatico(Vec &comb,int i,int num){
+    //Pre: comb es un vector de enteros no vacio, i y num son enteros positivos.
+    //Post: Devuelve true si no aparece num en comb hasta i, en caso contrario devuelve false.
     bool repetit=false;
     int j=0;
     while(not repetit and j<i){
+        //Inv: no se ha cumplido la condicion y se ha recorrido comb hasta j-1.
         if(num==comb[j]) repetit=true;
         else ++j;
     }
@@ -122,6 +127,8 @@ bool corrector_automatico(Vec &comb,const int &i,int num){
 }
 
 void mod_automatic(Vec &comb){
+    //Pre: comb es un vector de enteros vacio.
+    //Post: Guarda comb con numeros aleatorios [1,..,9] en cada posicion del vector.
     unsigned int size=comb.size();
     int i=0;
     while(i<size){
@@ -132,6 +139,7 @@ void mod_automatic(Vec &comb){
 
 void jugador_a(Vec &comb){
     //Pre: comb es un vector de enteros vacio.
+    //Post:-----------------------------------
     int cod;
     bool continuar = false;
     while(not continuar){
