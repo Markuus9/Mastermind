@@ -70,6 +70,10 @@ bool codigo_correcto(Vec &comb,int cod){
 }
 
 string visualizacion(const Vec &jugada, const Vec &comb, bool &final, int &correctas){
+    /* visualitzacion = devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
+    Ademas modifica final y correctas para actualizar el estado del juego.*/
+    // Pre: jugada y comb son dos vectores de enteros no vacios, final es un boleano.
+    // Post: Devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
     string resultado;
     bool no_esta;
     int aciertos = 0;
@@ -99,7 +103,7 @@ string visualizacion(const Vec &jugada, const Vec &comb, bool &final, int &corre
 }
 
 bool triar_mode(bool &Mode){
-    //Detecta quin mode es vol jugar.
+    // triar_mode = Detecta quin mode es vol jugar.
     //Pre: Mode es un bolea.
     //Post: Torna el resultat escollit pel jugador, el qual pot ser Manual o Automatic.
     char input;
@@ -151,7 +155,9 @@ void jugador_a(Vec &comb){
 }
 
 void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctas){
-    //Pre: comb es un vector de enteros vacio.
+    // jugador_b = muestra por pantalla (si la jugada es correcta), el historial con todas las jugadas y resultados. 
+    // Pre: jugada y comb son dos vectores de enteros no vacios, C es una tupla, final es un boleano i correctas es un entero no vacio.
+    // Post: muestra por pantalla el historial con todas las jugadas y resultados.
     int cod;
     bool continuar =false;
     while(not continuar){
