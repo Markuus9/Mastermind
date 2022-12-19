@@ -136,6 +136,7 @@ void mod_automatic(Vec &comb){
     unsigned int size=comb.size();
     int i=0;
     while(i<size){
+        //Inv: Se ha recorrido el vector hasta i-1.
         comb[i]=aleatori(1,9);
         if(corrector_automatico(comb,i,comb[i])) ++i;
     }
@@ -147,6 +148,7 @@ void jugador_a(Vec &comb){
     int cod;
     bool continuar = false;
     while(not continuar){
+        //Inv: No se ha cumplido la concidión del buleano.
         cout<<"Jugador A, escull el codi secret:"<<endl;
         cin>>cod;
         if(codigo_correcto(comb,cod)) continuar = true;
