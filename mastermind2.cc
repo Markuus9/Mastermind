@@ -13,6 +13,13 @@ struct Jugador {
     vector<string> Resultat;
 };
 
+int aleatori(int min, int max){
+    static random_device device{};
+    static default_random_engine engine{ device()};
+    uniform_int_distribution<int> distribution{min, max};
+    return distribution(engine);
+}
+
 Vec transform(int c){
     //transform = trasforma el codigo a vector.
     //Pre: c es un numero entero positivo de 4 digitos.
@@ -24,6 +31,16 @@ Vec transform(int c){
         c/=10;
     }
     return v;
+}
+
+int invert_transform(const Vec &comb){
+    int codigo=0;
+    for(int i=0;i<3;++i){
+        codigo+=comb[i];
+        codigo*=10;
+    }
+    codigo+=comb[3];
+    return codigo;
 }
 
 bool codigo_correcto(Vec &comb,int cod){
@@ -50,7 +67,7 @@ bool codigo_correcto(Vec &comb,int cod){
     return not incorrect;
 }
 
-string visualizacion(const Vec &jugada, const Vec comb, bool &final){
+string visualizacion(const Vec &jugada, const Vec &comb, bool &final, int &correctas){
     string resultado;
     bool no_esta;
     int aciertos = 0;
@@ -73,45 +90,10 @@ string visualizacion(const Vec &jugada, const Vec comb, bool &final){
         }
         if (aciertos==4){
             final = true;
+            correctas=aciertos;
         }
     }
     return resultado;
-}
-
-void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final){
-    //Pre: comb es un vector de enteros vacio.
-    int cod;
-    bool continuar =false;
-    while(not continuar){
-        cout<<"Jugador B, intent "<< C.Intents << ':'<<endl;
-        cin>>cod;
-        if(codigo_correcto(jugada,cod))continuar=true;
-        else cout<<"Error, codi incorrecte."<<endl;
-    }
-    C.Resultat.push_back(visualizacion(jugada, comb, final));
-    if (continuar == true){
-        C.Jugades.push_back(cod);
-        for(int i = 0; i<C.Intents; ++i){
-            if (C.Intents==10){
-                cout << 10 << "   " << C.Jugades[i] << "   " << C.Resultat[i] << endl;
-            } else {
-            cout << '0' << i+1 << "   " << C.Jugades[i] << "   " << C.Resultat[i] << endl;
-            }
-        }
-        C.Intents += 1;
-    }    
-}
-
-void jugador_a(Vec &comb){
-    //Pre: comb es un vector de enteros vacio.
-    int cod;
-    bool continuar = false;
-    while(not continuar){
-        cout<<"Jugador A, escull el codi secret:"<<endl;
-        cin>>cod;
-        if(codigo_correcto(comb,cod)) continuar = true;
-        else cout<<"Error, codi incorrecte."<<endl;
-    }
 }
 
 bool triar_mode(bool &Mode){
@@ -129,22 +111,72 @@ bool triar_mode(bool &Mode){
     return Mode;
 }
 
-int aleatori(int min, int max){
-    static random_device device{};
-    static default_random_engine engine{ device()};
-    uniform_int_distribution<int> distribution{min, max};
-    return distribution(engine);
+bool corrector_automatico(Vec &comb,const int &i,int num){
+    bool repetit=false;
+    int j=0;
+    while(not repetit and j<i){
+        if(num==comb[j]) repetit=true;
+        else ++j;
+    }
+    return not repetit;
+}
+
+void mod_automatic(Vec &comb){
+    unsigned int size=comb.size();
+    int i=0;
+    while(i<size){
+        comb[i]=aleatori(1,9);
+        if(corrector_automatico(comb,i,comb[i])) ++i;
+    }
+}
+
+void jugador_a(Vec &comb){
+    //Pre: comb es un vector de enteros vacio.
+    int cod;
+    bool continuar = false;
+    while(not continuar){
+        cout<<"Jugador A, escull el codi secret:"<<endl;
+        cin>>cod;
+        if(codigo_correcto(comb,cod)) continuar = true;
+        else cout<<"Error, codi incorrecte."<<endl;
+    }
+}
+
+void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctas){
+    //Pre: comb es un vector de enteros vacio.
+    int cod;
+    bool continuar =false;
+    while(not continuar){
+        cout<<"Jugador B, intent "<< C.Intents << ':'<<endl;
+        cin>>cod;
+        if(codigo_correcto(jugada,cod))continuar=true;
+        else cout<<"Error, codi incorrecte."<<endl;
+    }
+    C.Resultat.push_back(visualizacion(jugada, comb, final,correctas));
+    if (continuar == true){
+        C.Jugades.push_back(cod);
+        for(int i = 0; i<C.Intents; ++i){
+            if (C.Intents==10){
+                cout << 10 << "   " << C.Jugades[i] << "   " << C.Resultat[i] << endl;
+                final=true;
+            } else {
+            cout << '0' << i+1 << "   " << C.Jugades[i] << "   " << C.Resultat[i] << endl;
+            }
+        }
+        C.Intents += 1;
+    }    
 }
 
 int main(){
     bool Manual, finalizado = false;
+    int correctas=0;
     Jugador B;
     Vec combinacion(4);
     Vec jugadas;
     cout << "BENVINGUT AL JOC MASTERMIND!!" << endl << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? :" << endl;
-    triar_mode(Manual);
-    jugador_a(combinacion);
-    while (not finalizado){
-        jugador_b(jugadas, B, combinacion, finalizado);
-    }
+    if(triar_mode(Manual)) jugador_a(combinacion);
+    else mod_automatic(combinacion);
+    while(not finalizado) jugador_b(jugadas, B, combinacion, finalizado, correctas);
+    if(correctas==4) cout << "Felicitats jugador B!! Has guanyat!!" << endl;
+    else cout << "Has esgotat els 10 intents." << endl << "El codi secret era: " <<invert_transform(combinacion)<<endl;
 }
