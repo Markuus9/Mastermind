@@ -3,26 +3,25 @@
 #include <random>
 using namespace std;
 
+typedef vector<int> Vec;
+
 struct Jugador {
     int Intents = 1;            //intents<=10
     vector<int> Jugades;        //Jugades.size()<=10.
     vector<string> Resultat;    //Resultat.size()<=10.
 };
 
-typedef vector<int> Vec;
-
 int aleatori(int min, int max){
-    //Pre: min i max son nombres enters.
-    //Post: Retorna un numero aleatori entre min i max.
     static random_device device{};
     static default_random_engine engine{ device()};
     uniform_int_distribution<int> distribution{min, max};
     return distribution(engine);
 }
 
-Vec transforma(int c){
-    //Pre: c es un nombre enter de 4 digits.
-    //Post: Retorna un vector amb cadascun dels digits de c.
+Vec transform(int c){
+    //transform = trasforma el codigo a vector.
+    //Pre: c es un numero entero positivo de 4 digitos.
+    //Post: Devuelve un vector con cada digito del numero c.
     Vec v(4);
     for(int i=0;i<4;++i){
         //Inv: El vector v conte els digits [4-i] del numero c a la posicio [3-(i-1)]
@@ -33,22 +32,24 @@ Vec transforma(int c){
 }
 
 int invert_transform(const Vec &comb){
-    //Pre: comb es un vector d'enters no buit.
-    //Post: Retorna la concatenació d'aquest vector en un enter.
-    int codi=0;
-    for(int i=0;i<3;++i){
-        //Inv: S'emmagatzema la concatenacio de comb a codi fins i-1.
-        codi+=comb[i];
-        codi*=10;
+    //Pre: comb es un vector de enteros no vacio.
+    //Post: devuelve el valor de la concatenacion de cada posicion del vector.
+    unsigned int size= comb.size();
+    int codigo=0;
+    for(int i=0;i<size-1;++i){
+        //Inv: Se almacena en codigo la concatencacion de los valores de comb hasta i-1.
+        codigo+=comb[i];
+        codigo*=10;
     }
-    codi+=comb[3];
-    return codi;
+    codigo+=comb[3];
+    return codigo;
 }
 
-bool codiEsCorrecte(Vec &comb,int cod){
-    //Pre: comb es un vector d'enters buit i cod es un nombre enter.
-    /*Post: Retorna true si 1234<=cod<=9876, no es repeteix cap numero y si el codi no conte el numero 0.
-            En cas contrari, retorna false.*/
+bool codigo_correcto(Vec &comb,int cod){
+    //codigo_correcto = comprueba si el codigo/intento es valido.
+    //Pre: comb es un vector de enteros vacio y cod en un numero entero positivo.
+    /*Post: Devuelve verdadero si 1234<=cod<=9876 y no se repite ningun numero y si el codigo no contiene 0.
+            En caso contrario, devuelve falso.*/
     bool incorrect=false;
     if(cod>=1234 and cod<=9876){
         comb=transforma(cod);
@@ -69,7 +70,7 @@ bool codiEsCorrecte(Vec &comb,int cod){
 }
 
 string visualizacion(const Vec &jugada, const Vec &comb, bool &final, int &correctas){
-     /* visualitzacion = devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
+    /* visualitzacion = devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
     Ademas modifica final y correctas para actualizar el estado del juego.*/
     // Pre: jugada y comb son dos vectores de enteros no vacios, final es un boleano.
     // Post: Devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
@@ -102,7 +103,7 @@ string visualizacion(const Vec &jugada, const Vec &comb, bool &final, int &corre
 }
 
 bool triar_mode(bool &Mode){
-    //Detecta quin mode es vol jugar.
+    // triar_mode = Detecta quin mode es vol jugar.
     //Pre: Mode es un bolea.
     //Post: Torna el resultat escollit pel jugador, el qual pot ser Manual o Automatic.
     char input;
@@ -116,48 +117,48 @@ bool triar_mode(bool &Mode){
     return Mode;
 }
 
-bool esCorrecte(Vec &comb,const int &i,const int &num){
-    //Pre: comb es un vector d'enters buit. i i num son nombres enters.
-    //Post: retorna true si es repeteix el valor num en el vector comb fins la posició iesima.
+bool corrector_automatico(Vec &comb,int i,int num){
+    //Pre: comb es un vector de enteros no vacio, i y num son enteros positivos.
+    //Post: Devuelve true si no aparece num en comb hasta i, en caso contrario devuelve false.
     bool repetit=false;
     int j=0;
     while(not repetit and j<i){
-        //Inv: No s'ha complit la condicio i a mes s'ha recorregut el vector fins j-1.
+        //Inv: no se ha cumplido la condicion y se ha recorrido comb hasta j-1.
         if(num==comb[j]) repetit=true;
         else ++j;
     }
     return not repetit;
 }
 
-void modeAutomatic(Vec &comb){
-    //Pre: comb es un vector d'enters buit.
-    //Post: Crea una combinacio aleatoria de 4 digits amb numeros no repetits [1,...,9].
+void mod_automatic(Vec &comb){
+    //Pre: comb es un vector de enteros vacio.
+    //Post: Guarda comb con numeros aleatorios [1,..,9] en cada posicion del vector.
     unsigned int size=comb.size();
     int i=0;
     while(i<size){
-        //Inv: S'emmagatzema en comb un numero aleatori no repetit en l'interval[1,...,9] al vector comb fins i-1.
+        //Inv: Se ha recorrido el vector hasta i-1.
         comb[i]=aleatori(1,9);
-        if(esCorrecte(comb,i,comb[i])) ++i;
+        if(corrector_automatico(comb,i,comb[i])) ++i;
     }
 }
 
 void jugador_a(Vec &comb){
     //Pre: comb es un vector de enteros vacio.
-    //Post: Introdueix una combinacio aleatoria de numeros no repetits en l'interval [1,...,9].
-    int codi;
+    //Post:-----------------------------------
+    int cod;
     bool continuar = false;
     while(not continuar){
-        //Inv: no s'ha complert la condicio del bolea
+        //Inv: No se ha cumplido la concidión del buleano.
         cout<<"Jugador A, escull el codi secret:"<<endl;
-        cin>>codi;
-        if(codiEsCorrecte(comb,codi)) continuar = true;
+        cin>>cod;
+        if(codigo_correcto(comb,cod)) continuar = true;
         else cout<<"Error, codi incorrecte."<<endl;
     }
 }
 
 void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctas){
     // jugador_b = muestra por pantalla (si la jugada es correcta), el historial con todas las jugadas y resultados. 
-    // Pre: jugada y comb son dos vectores de enteros no vacios, C es una tupla de tipo Jugador, final es un boleano y correctas es un entero.
+    // Pre: jugada y comb son dos vectores de enteros no vacios, C es una tupla, final es un boleano i correctas es un entero no vacio.
     // Post: muestra por pantalla el historial con todas las jugadas y resultados.
     int cod;
     bool continuar =false;
@@ -190,7 +191,7 @@ int main(){
     Vec jugadas;
     cout << "BENVINGUT AL JOC MASTERMIND!!" << endl << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? :" << endl;
     if(triar_mode(Manual)) jugador_a(combinacion);
-    else modeAutomatic(combinacion);
+    else mod_automatic(combinacion);
     while(not finalizado) jugador_b(jugadas, B, combinacion, finalizado, correctas);
     if(correctas==4) cout << "Felicitats jugador B!! Has guanyat!!" << endl;
     else cout << "Has esgotat els 10 intents." << endl << "El codi secret era: " <<invert_transform(combinacion)<<endl;
