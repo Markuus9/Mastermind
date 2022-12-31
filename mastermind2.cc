@@ -68,37 +68,37 @@ bool codiEsCorrecte(Vec &comb,int cod){
     return not incorrect;
 }
 
-string visualizacion(const Vec &jugada, const Vec &comb, bool &final, int &correctas){
-     /* visualitzacion = devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
-    Ademas modifica final y correctas para actualizar el estado del juego.*/
-    // Pre: jugada y comb son dos vectores de enteros no vacios, final es un boleano.
-    // Post: Devuelve un string con la visualizacion de las posiciones bien colocadas, mal colocadas, y las que no estan.
-    string resultado;
-    bool no_esta;
-    int aciertos = 0;
+string visualizacio(const Vec &jugada, const Vec &comb, bool &final, int &correctes){
+     /* Visualització = retorna un string amb la visualització de les posicions ben col·locades, mal col·locades, i les que no hi son.
+     A més, modifica final i correctes per actualitzar l'estat del joc.*/
+    // Pre: Jugada i comb són dos vectors de sencers no buits, final és un boleà.
+    // Post: Retorna un string amb la visualització de les posicions ben col·locades, mal col·locades, i les que no estan.
+    string resultat;
+    bool no_hi_es;
+    int encerts = 0;
     for(int i=0; i<4; ++i){
-        no_esta = true;
+        no_hi_es = true;
         if(jugada[i]==comb[i]){
-            resultado.push_back('X');
-            no_esta = false;
-            aciertos += 1;
+            resultat.push_back('X');
+            no_hi_es = false;
+            encerts += 1;
         } else {
             for(int j=0; j<4; ++j){
                 if(jugada[i]==comb[j]){
-                    resultado.push_back('O');
-                    no_esta = false;
+                    resultat.push_back('O');
+                    no_hi_es = false;
                 } 
             }
         }
-        if (no_esta == true){
-           resultado.push_back('-'); 
+        if (no_hi_es == true){
+           resultat.push_back('-'); 
         }
-        if (aciertos==4){
+        if (encerts==4){
             final = true;
-            correctas=aciertos;
+            correctes=encerts;
         }
     }
-    return resultado;
+    return resultat;
 }
 
 bool triar_mode(bool &Mode){
@@ -155,10 +155,10 @@ void jugador_a(Vec &comb){
     }
 }
 
-void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctas){
-    // jugador_b = muestra por pantalla (si la jugada es correcta), el historial con todas las jugadas y resultados. 
-    // Pre: jugada y comb son dos vectores de enteros no vacios, C es una tupla de tipo Jugador, final es un boleano y correctas es un entero.
-    // Post: muestra por pantalla el historial con todas las jugadas y resultados.
+void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctes){
+    // jugador_b = mostra per pantalla (si la jugada és correcta), l'historial amb totes les jugades i resultats. 
+    // Pre: jugada i comb són dos vectors de sencers no buits, C és una tupla de tipus Jugador, final és un boleà i correctes és un sencer.
+    // Post: mostra per pantalla l'historial amb totes les jugades i els resultats.
     int cod;
     bool continuar =false;
     while(not continuar){
@@ -167,7 +167,7 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctas){
         if(codiEsCorrecte(jugada,cod))continuar=true;
         else cout<<"Error, codi incorrecte."<<endl;
     }
-    C.Resultat.push_back(visualizacion(jugada, comb, final,correctas));
+    C.Resultat.push_back(visualizacio(jugada, comb, final,correctes));
     if (continuar == true){
         C.Jugades.push_back(cod);
         for(int i = 0; i<C.Intents; ++i){
@@ -183,15 +183,15 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctas){
 }
 
 int main(){
-    bool Manual, finalizado = false;
-    int correctas=0;
+    bool Manual, finalitzat = false;
+    int correctes=0;
     Jugador B;
-    Vec combinacion(4);
-    Vec jugadas;
+    Vec combinació(4);
+    Vec jugades;
     cout << "BENVINGUT AL JOC MASTERMIND!!" << endl << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? :" << endl;
-    if(triar_mode(Manual)) jugador_a(combinacion);
-    else modeAutomatic(combinacion);
-    while(not finalizado) jugador_b(jugadas, B, combinacion, finalizado, correctas);
-    if(correctas==4) cout << "Felicitats jugador B!! Has guanyat!!" << endl;
-    else cout << "Has esgotat els 10 intents." << endl << "El codi secret era: " <<invert_transform(combinacion)<<endl;
+    if(triar_mode(Manual)) jugador_a(combinació);
+    else modeAutomatic(combinació);
+    while(not finalitzat) jugador_b(jugades, B, combinació, finalitzat, correctes);
+    if(correctes==4) cout << "Felicitats jugador B!! Has guanyat!!" << endl;
+    else cout << "Has esgotat els 10 intents." << endl << "El codi secret era: " <<invert_transform(combinació)<<endl;
 }
