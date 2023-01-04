@@ -4,9 +4,9 @@
 using namespace std;
 
 struct Jugador {
-    int Intents = 1;            //intents<=10
-    vector<int> Jugades;        //Jugades.size()<=10.
-    vector<string> Resultat;    //Resultat.size()<=10.
+    int Intents = 1;            //Inv: Intents<=10
+    vector<int> Jugades;        //Inv: Jugades.size()<=10.
+    vector<string> Resultat;    //Inv: Resultat.size()<=10.
 };
 
 typedef vector<int> Vec;
