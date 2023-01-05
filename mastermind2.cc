@@ -106,11 +106,12 @@ bool triar_mode(bool &Mode){
     //Pre: Mode es un bolea.
     //Post: Torna el resultat escollit pel jugador, el qual pot ser Manual o Automatic.
     char input;
+    cout << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? : " << endl;
     cin >> input;
     if (input == 'A') Mode = false;
     else if(input == 'M') Mode = true;
     else {
-       cout << "Error: Mode de joc incorrecte." << endl << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? :"<< endl;
+       cout << "Error: Mode de joc incorrecte." << endl;
        triar_mode(Mode);
     }
     return Mode;
@@ -132,8 +133,7 @@ bool esCorrecte(Vec &comb,const int &i,const int &num){
 void modeAutomatic(Vec &comb){
     //Pre: comb es un vector d'enters buit.
     //Post: Crea una combinacio aleatoria de 4 digits amb numeros no repetits [1,...,9].
-    unsigned int size=comb.size();
-    int i=0;
+    unsigned int size=comb.size(),i=0;
     while(i<size){
         //Inv: S'emmagatzema en comb un numero aleatori no repetit en l'interval[1,...,9] al vector comb fins i-1.
         comb[i]=aleatori(1,9);
@@ -146,12 +146,13 @@ void jugador_a(Vec &comb){
     //Post: Introdueix una combinacio aleatoria de numeros no repetits en l'interval [1,...,9].
     int codi;
     bool continuar = false;
+    cout<<endl;
     while(not continuar){
         //Inv: no s'ha complert la condicio del bolea
-        cout<<"Jugador A, escull el codi secret:"<<endl;
+        cout<<"Jugador A, escull el codi secret: "<<endl;
         cin>>codi;
         if(codiEsCorrecte(comb,codi)) continuar = true;
-        else cout<<"Error, codi incorrecte."<<endl;
+        else cout<<"Error: Codi secret incorrecte."<<endl;
     }
 }
 
@@ -159,19 +160,20 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctes){
     // jugador_b = mostra per pantalla (si la jugada és correcta), l'historial amb totes les jugades i resultats. 
     // Pre: jugada i comb són dos vectors de sencers no buits, C és una tupla de tipus Jugador, final és un boleà i correctes és un sencer.
     // Post: mostra per pantalla l'historial amb totes les jugades i els resultats.
-    int cod;
     bool continuar =false;
+    int cod;
     while(not continuar){
-        cout<<"Jugador B, intent "<< C.Intents << ':'<<endl;
+        cout<<"Jugador B, intent "<< C.Intents << ": "<<endl;
         cin>>cod;
         if(codiEsCorrecte(jugada,cod))continuar=true;
-        else cout<<"Error, codi incorrecte."<<endl;
+        else cout<<"Error: Intent incorrecte."<<endl;
     }
     C.Resultat.push_back(visualizacio(jugada, comb, final,correctes));
     if (continuar == true){
         C.Jugades.push_back(cod);
+        cout<<"Jugades:"<<endl;
         for(int i = 0; i<C.Intents; ++i){
-            if (C.Intents==10){
+            if (i+1==10){
                 cout << 10 << "   " << C.Jugades[i] << "   " << C.Resultat[i] << endl;
                 final=true;
             } else {
@@ -179,6 +181,7 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctes){
             }
         }
         C.Intents += 1;
+        cout<<endl;
     }    
 }
 
@@ -188,9 +191,10 @@ int main(){
     Jugador B;
     Vec combinació(4);
     Vec jugades;
-    cout << "BENVINGUT AL JOC MASTERMIND!!" << endl << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? :" << endl;
+    cout << "BENVINGUT AL JOC MASTERMIND!!" << endl<<endl;
     if(triar_mode(Manual)) jugador_a(combinació);
     else modeAutomatic(combinació);
+    cout<<endl;
     while(not finalitzat) jugador_b(jugades, B, combinació, finalitzat, correctes);
     if(correctes==4) cout << "Felicitats jugador B!! Has guanyat!!" << endl;
     else cout << "Has esgotat els 10 intents." << endl << "El codi secret era: " <<invert_transform(combinació)<<endl;
