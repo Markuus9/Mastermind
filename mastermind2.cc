@@ -107,11 +107,11 @@ bool triar_mode(bool &Mode){
     //Detecta quin mode es vol jugar.
     //Pre: Mode es un bolea.
     //Post: Torna el resultat escollit pel jugador, el qual pot ser Manual o Automatic.
-    char input;
+    string input;
     cout << "Quin mode de joc vols triar, Manual (M)/ Aleatori (A)? : " << endl;
     cin >> input;
-    if (input == 'A') Mode = false;
-    else if(input == 'M') Mode = true;
+    if (input[0] == 'A' and input.size()==1) Mode = false;
+    else if(input[0] == 'M' and input.size()==1) Mode = true;
     else {
        cout << "Error: Mode de joc incorrecte." << endl;
        triar_mode(Mode);
