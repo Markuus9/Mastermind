@@ -77,6 +77,7 @@ string visualizacio(const Vec &jugada, const Vec &comb, bool &final, int &correc
     bool no_hi_es;
     int encerts = 0;
     for(int i=0; i<4; ++i){
+	//Inv: Comprova si la posició del codi secret [i], és igual a la posició [i] de l'intent. 
         no_hi_es = true;
         if(jugada[i]==comb[i]){
             resultat.push_back('X');
@@ -84,6 +85,7 @@ string visualizacio(const Vec &jugada, const Vec &comb, bool &final, int &correc
             encerts += 1;
         } else {
             for(int j=0; j<4; ++j){
+		//Inv: Comprova si la posició [i] de la jugada és igual a alguna de les posicions del codi secret.
                 if(jugada[i]==comb[j]){
                     resultat.push_back('O');
                     no_hi_es = false;
@@ -163,6 +165,7 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctes){
     bool continuar =false;
     int cod;
     while(not continuar){
+	// Inv: no s'ha complert la condicio del bolea
         cout<<"Jugador B, intent "<< C.Intents << ": "<<endl;
         cin>>cod;
         if(codiEsCorrecte(jugada,cod))continuar=true;
@@ -173,6 +176,7 @@ void jugador_b(Vec &jugada, Jugador &C, Vec &comb, bool &final,int &correctes){
         C.Jugades.push_back(cod);
         cout<<"Jugades:"<<endl;
         for(int i = 0; i<C.Intents; ++i){
+	    // Inv: Mostra per pantalla l'historial de jugades fins al moment, és a dir, segons el número d'intents.
             if (i+1==10){
                 cout << 10 << "   " << C.Jugades[i] << "   " << C.Resultat[i] << endl;
                 final=true;
