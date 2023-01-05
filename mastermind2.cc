@@ -151,8 +151,8 @@ void jugador_a(Vec &comb){
         //Inv: no s'ha complert la condicio del bolea
         cout<<"Jugador A, escull el codi secret: "<<endl;
         cin>>codi;
-        if(codiEsCorrecte(comb,codi)) continuar = true;
-        else cout<<"Error: Codi secret incorrecte."<<endl;
+		if(codiEsCorrecte(comb,codi)) continuar = true;
+		else cout<<"Error: Codi secret incorrecte."<<endl;
     }
 }
 
@@ -197,5 +197,5 @@ int main(){
     cout<<endl;
     while(not finalitzat) jugador_b(jugades, B, combinació, finalitzat, correctes);
     if(correctes==4) cout << "Felicitats jugador B!! Has guanyat!!" << endl;
-    else cout << "Has esgotat els 10 intents." << endl << "El codi secret era: " <<invert_transform(combinació)<<endl;
+    else cout << "Has esgotat els 10 intents." << endl << "El codi secret era " <<invert_transform(combinació)<<endl;
 }
