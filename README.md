@@ -17,17 +17,18 @@ In this game, players try to guess a hidden code within a set number of attempts
 - **Terminal-based**: No graphical interface; entirely playable within a terminal.
 - **Feedback System**: Receive hints after each guess to help you crack the code.
 
-### Prerequisites
+## Prerequisites
 
 - C++11 compatible compiler (e.g., `g++`).
 
-### Compilation
+## Compilation
 
 To compile the game, open your terminal and run:
 
 ```bash
 $ g++ -std=c++11 -Wall -o Mastermind.e Mastermind.cc
-
-### Usage
+```
+## Usage
 ```bash
 $ ./Mastermind.e
+```
